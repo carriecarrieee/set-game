@@ -2,26 +2,16 @@
    Rules of the game Set: https://paper.dropbox.com/doc/lYHYZDoLQtlINtyyEYSVi"""
 
 
-import random
+from random import shuffle
 
 
 class SetCard(object):
-    """Models a Set card, and each card has a shape, shading, and count.
-       Possible values for each attribute are:
-
-        shapes = ["oval", "squiggle", "diamond"]
-        shadings = ["solid", "striped", "open"]
-        counts = [1, 2, 3]
-    """
+    """Models a Set card, and each card has a shape, shading, and count."""
 
     def __init__(self, shape, shading, count):
         self.shape = shape
         self.shading = shading
         self.count = count
-
-        shapes = ["oval", "squiggle", "diamond"]
-        shadings = ["solid", "striped", "open"]
-        counts = [1, 2, 3]
 
 
     def __repr__(self):
@@ -33,24 +23,35 @@ class SetGame(SetCard):
        on initialization.
     """
     
-        def __init__(self):
-            super(SetCard, self).__init__()
-            self.table = table
+    def __init__(self):
+        super(SetCard, self).__init__()
+        self.table = [] # List that tracks cards currently on table
 
-            deck = [Card(shape, shading, count) for shape in shapes \
-                                                for shading in shadings \
-                                                for count in counts]
+        shapes = ["oval", "squiggle", "diamond"]
+        shadings = ["solid", "striped", "open"]
+        counts = [1, 2, 3]
+        
+        deck = [Card(shape, shading, count) for shape in shapes \
+                                            for shading in shadings \
+                                            for count in counts]
 
-        def deal(num_cards):
-            pass
+    def deal(self, num_cards):
+        shuffle(self.deck)
+
+        for i in range(num_cards):
+            if self.deck.is_empty():
+                break
+            self.table.append(deck.pop())
+
+        return self.table
+            
+
+    def is_set(self, card1, card2, card3):
+        pass
 
 
-        def is_set(card1, card2, card3):
-            pass
-
-
-        def find_set():
-            pass
+    def find_set():
+        pass
 
 
  
