@@ -15,6 +15,14 @@ class SetCard:
 
 
     def __repr__(self):
+        """Prints representation of a SetCard:
+
+        >>> newCard = SetCard('oval', 'striped', 3)
+        >>> newCard.__repr__()
+        ['oval', 'striped', 3]
+
+        """
+
         print [self.shape, self.shading, self.count]
 
         
@@ -33,7 +41,16 @@ class SetGame(SetCard):
                                                     for shading in shadings \
                                                     for count in counts]
 
+
     def deal(self, num_cards):
+        """In a game of Set, cards are dealt onto the table at a given time. 
+           The instance variable "table" tracks the cards that are currently on
+           the table. This function deals num_cards random cards onto the table 
+           from the deck.
+
+           myGame = SetGame()
+           myGame.deal(4)
+        """
 
         self.num_cards = num_cards # Number of cards to be dealt
         self.table = [] # List that tracks cards currently on table
@@ -41,7 +58,7 @@ class SetGame(SetCard):
         shuffle(self.deck) # Shuffle cards before dealing
 
         for i in range(num_cards):
-            if self.deck.is_empty(): # In case the deck is empty
+            if not self.deck: # In case the deck is empty
                 print "Deck is empty!"
                 break
 
@@ -49,7 +66,10 @@ class SetGame(SetCard):
             self.table.append(self.deck.pop())
 
         return self.table
-            
+# myGame = SetGame()
+# print myGame.deal(4)        
+
+# How do I print self.table without overriding the __repr__ method in superclass?
 
     def is_set(self, card1, card2, card3):
         """Rules of the game Set: 
@@ -61,6 +81,13 @@ class SetGame(SetCard):
             1. Shape: all the same shape OR all different shapes
             2. Shading: all the same shading OR all different shading
             3. Count: all the same count OR all different count
+
+            >>> myGame = SetGame()
+            >>> myGame.is_set(["oval", "solid", 1], ["oval", "solid", 2], ["oval", "solid", 3])
+            True
+
+            >>> myGame.is_set(["oval", "solid", 1], ["oval", "striped", 2], ["oval", "solid", 3])
+            False
         """
 
         self.card1 = card1
@@ -80,22 +107,27 @@ class SetGame(SetCard):
         count2 = card2[2]
         count3 = card3[2]
 
-        if ((shape1 == shape2 == shape3) or \
-            (shape1 != shape2 != shape3)) and \
-           ((shading1 == shading2 == shading3) or \
-            (shading1 != shading2 != shading3)) and \
-           ((count1 == count2 == count3) or \
-            (count1 != count2 != count3)):
+        return ((shape1 == shape2 == shape3) or \
+                (shape1 != shape2 and \
+                 shape2 != shape3 and \
+                 shape1 != shape3)) and \
+               ((shading1 == shading2 == shading3) or \
+                (shading1 != shading2 and \
+                 shading2 != shading3 and \
+                 shading1 != shading3)) and \
+               ((count1 == count2 == count3) or \
+                (count1 != count2 and \
+                 count2 != count3 and \
+                 count1 != count3))
 
-            return True
+    def find_set():
+        pass
 
-        return False
 
 
-    #def find_set():
-        #pass
+if __name__ == "__main__":
+    import doctest
 
-mygame = SetGame()
-#print mygame.is_set(["oval", "solid", 1], ["oval", "solid", 2], ["oval", "solid", 3])
-print mygame.is_set(["oval", "solid", 1], ["oval", "striped", 2], ["oval", "solid", 3])
- 
+    result = doctest.testmod()
+    if result.failed == 0:
+        print "ALL TESTS PASSED"
