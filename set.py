@@ -132,8 +132,10 @@ if __name__ == "__main__":
     print myGame
     print "\n****************************************\n"
 
-    print "List of 7 cards that were dealt from the deck onto the table:\n"
-    for card in myGame.deal(7):
+    print "List of cards that were dealt from the deck onto the table:\n"
+    myGame.deal(4)
+    myGame.deal(5)
+    for card in myGame.table:
         print card
     print "\n****************************************\n"
 
