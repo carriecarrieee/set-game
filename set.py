@@ -1,5 +1,6 @@
-"""Implements a modified version of the real card game Set.
-   Rules of the game Set: https://paper.dropbox.com/doc/lYHYZDoLQtlINtyyEYSVi"""
+""" Implements a modified version of the real card game Set.
+    Rules of the game Set: https://paper.dropbox.com/doc/lYHYZDoLQtlINtyyEYSVi
+"""
 
 
 from random import shuffle
@@ -51,15 +52,39 @@ class SetGame:
 
 
     def __repr__(self):
-        """ Prints string representation of deck.
+        """ Prints string representation of object.
 
             Test:
 
             >>> myGame = SetGame()
-            >>> print myGame.deck
-            [oval, solid, 1, oval, solid, 2, oval, solid, 3, oval, striped, 1, oval, striped, 2, oval, striped, 3, oval, open, 1, oval, open, 2, oval, open, 3, squiggle, solid, 1, squiggle, solid, 2, squiggle, solid, 3, squiggle, striped, 1, squiggle, striped, 2, squiggle, striped, 3, squiggle, open, 1, squiggle, open, 2, squiggle, open, 3, diamond, solid, 1, diamond, solid, 2, diamond, solid, 3, diamond, striped, 1, diamond, striped, 2, diamond, striped, 3, diamond, open, 1, diamond, open, 2, diamond, open, 3]
-
-
+            >>> print myGame
+            oval, solid, 1
+            oval, solid, 2
+            oval, solid, 3
+            oval, striped, 1
+            oval, striped, 2
+            oval, striped, 3
+            oval, open, 1
+            oval, open, 2
+            oval, open, 3
+            squiggle, solid, 1
+            squiggle, solid, 2
+            squiggle, solid, 3
+            squiggle, striped, 1
+            squiggle, striped, 2
+            squiggle, striped, 3
+            squiggle, open, 1
+            squiggle, open, 2
+            squiggle, open, 3
+            diamond, solid, 1
+            diamond, solid, 2
+            diamond, solid, 3
+            diamond, striped, 1
+            diamond, striped, 2
+            diamond, striped, 3
+            diamond, open, 1
+            diamond, open, 2
+            diamond, open, 3
         """
 
         deck_lst = []
@@ -118,12 +143,6 @@ class SetGame:
             >>> card2 = SetCard('diamond', 'striped', 2)
             >>> card3 = SetCard('squiggle', 'striped', 3)
             >>> myGame = SetGame()
-            >>> myGame.is_shape_valid(card1, card2, card2)
-            False
-            >>> myGame.is_shading_valid(card1, card2, card3)
-            True
-            >>> myGame.is_count_valid(card1, card1, card2)
-            False
             >>> myGame.is_set(card1, card2, card3)
             True
             >>> myGame.is_set(card1, card2, card2)
@@ -136,7 +155,17 @@ class SetGame:
 
 
     def is_shape_valid(self, card1, card2, card3):
-        """ Returns True if the shape attribute is valid, False otherwise."""
+        """ Returns True if the shape attribute is valid, False otherwise.
+
+            Test:
+
+            >>> card1 = SetCard('oval', 'striped', 1)
+            >>> card2 = SetCard('diamond', 'striped', 2)
+            >>> card3 = SetCard('squiggle', 'striped', 3)
+            >>> myGame = SetGame()
+            >>> myGame.is_shape_valid(card1, card2, card2)
+            False
+        """
 
         return (card1.shape == card2.shape == card3.shape) or \
                 (card1.shape != card2.shape and \
@@ -145,7 +174,17 @@ class SetGame:
 
 
     def is_shading_valid(self, card1, card2, card3):
-        """ Returns True if the shading attribute is valid, False otherwise."""
+        """ Returns True if the shading attribute is valid, False otherwise.
+            
+            Test:
+
+            >>> card1 = SetCard('oval', 'striped', 1)
+            >>> card2 = SetCard('diamond', 'striped', 2)
+            >>> card3 = SetCard('squiggle', 'striped', 3)
+            >>> myGame = SetGame()
+            >>> myGame.is_shading_valid(card1, card2, card3)
+            True
+        """
 
         return (card1.shading == card2.shading == card3.shading) or \
                 (card1.shading != card2.shading and \
@@ -154,7 +193,17 @@ class SetGame:
 
 
     def is_count_valid(self, card1, card2, card3):
-        """ Returns True if the count attribute is valid, False otherwise."""
+        """ Returns True if the count attribute is valid, False otherwise.
+
+            Test:
+
+            >>> card1 = SetCard('oval', 'striped', 1)
+            >>> card2 = SetCard('diamond', 'striped', 2)
+            >>> card3 = SetCard('squiggle', 'striped', 3)
+            >>> myGame = SetGame()
+            >>> myGame.is_count_valid(card1, card1, card2)
+            False
+        """
 
         return (card1.count == card2.count == card3.count) or \
                 (card1.count != card2.count and \
@@ -164,24 +213,32 @@ class SetGame:
 
     def find_set(self):
         """ Finds one possible set among the table cards and prints it out.
-            The function returns a boolean indicating whether or not a set was found.
+            The function returns a boolean indicating whether or not a set was 
+            found.
         """
 
-        if len(self.table) >= 3:
-            for i in range(len(self.table)):
-                for j in range(len(self.table[1:])):                
-                    for k in range(len(self.table[2:])):
-                        if self.table[i] != self.table[j] and \
-                           self.table[j] != self.table[k] and \
-                           self.table[i] != self.table[k] and \
-                           self.is_set(self.table[i], self.table[j], self.table[k]):
-                                print self.table[i], self.table[j], self.table[k]
-                                return True
+        if len(self.table) >= 3: # There's no set if table has less than 3 cards
+
+            # Loop through indices and control for beginning and end of table
+            # list to not overlap checks i.e. if cards were:
+            # [ a, b, c, d, e ] -- Check possible combinations:
+            # [ a, b, c ]
+            #    [ b, c, d ]
+            #       [ c, d, e ]
+
+            for i in range(len(self.table)-2):
+                for j in range(i+1, len(self.table)-1):                
+                    for k in range(j+1, len(self.table)):
+
+                        # These 3 cards will never be the same card
+                        if self.is_set(self.table[i], self.table[j], self.table[k]):
+                            print self.table[i], self.table[j], self.table[k]
+                            return True
 
         print "Sorry, no set found."
         return False
 
-# loop through indices i.e. for i in range(0, len(self.table))
+
 
 if __name__ == "__main__":
 
@@ -198,4 +255,4 @@ if __name__ == "__main__":
 
     result = doctest.testmod()
     if result.failed == 0:
-        print "\nALL TESTS PASSED"
+        print "\nALL TESTS PASSED\n"
